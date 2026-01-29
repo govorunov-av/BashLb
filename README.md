@@ -51,7 +51,8 @@ Simple Bash-based load balancer with automatic channel failover / dead gateway d
 ```
 ### Топология
 В моем случае получилось подобная топология:
-<img width="2128" height="629" alt="image" src="https://github.com/user-attachments/assets/592fccd9-cd99-4d02-8436-0e11973e5b07" />
+<img width="2175" height="647" alt="image" src="https://github.com/user-attachments/assets/452350a2-c706-44fd-8f3e-72b606cd5bb8" />
+
 
 
 Скорость переключения/отключения шлюзов, во многом, зависит от кол-ва шлюзов, задержки до используемых серверов тестирования работоспособности шлюзов и времени sleep в конце скрипта.
