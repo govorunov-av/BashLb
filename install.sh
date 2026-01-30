@@ -3,7 +3,7 @@ if [ -n "$1" ]; then
 chmod +x "$1"
 cat << EOF1 > /etc/systemd/system/bash_lb.service
 [Unit]
-Description=My simple test service
+Description=BashLB simple isp load balancer. Home repo: https://github.com/govorunov-av/BashLb
 After=network.target
 
 [Service]
