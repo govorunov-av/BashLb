@@ -172,10 +172,8 @@ while true; do
             else
 	      echo "ALERT : No alived gateways!"
             fi
-
 	  fi
           break
-#          fi
 	fi
       fi 
     fi
@@ -185,10 +183,10 @@ done
 
 conn_test () {
 check=0
+if [ $test_method -eq 1 ]; then
 ip r del default 2>/dev/null
 ip r add default via "$table_gateway"
-#ping_loss=$(ping -4fqc 10 $ping_check_ip 2>/dev/null | grep "packet loss" | awk -F "," '{print$3}' | awk -F "%" '{print$1}')
-ping_loss=$(ping -4fqc 3 $ping_check_ip  2>/dev/null | awk -F',' '/packet loss/ {gsub(/[^0-9]/,"",$3); print $3}')
+ping_loss=$(ping -i 0.005 -4fqc 3 $ping_check_ip  2>/dev/null | awk -F',' '/packet loss/ {gsub(/[^0-9]/,"",$3); print $3}' | cut -c1-2)
 if [ -n "$ping_loss" ]; then
   if [ "$ping_loss" -gt 50 ]; then
     echo "gw$counter : Ping too many losses ($ping_loss%)"
@@ -197,14 +195,16 @@ if [ -n "$ping_loss" ]; then
 else 
   check=1
 fi
-if [ $test_method -eq 1 ]; then
+fi
+sleep 1
+if [ $test_method -eq 2 ]; then
   curl -s --max-time 3 $curl_check_site > /dev/null
   if [ $? -ne 0 ]; then
     echo "gw$counter : DNS / HTTP check failed"
     check=1
   fi
 fi
-if [ "$test_method" -eq 2 ]; then
+if [ "$test_method" -eq 3 ]; then
   ip_state=$(awk -F "|" '{print$4}' <<< "$gw_value")
   ip_now=$(curl -s --max-time 5 $wan_ip_check_site)
   if [ "$ip_now" != "$ip_state" ]; then
