@@ -23,8 +23,8 @@ if ! ip link show "$net_int" >/dev/null 2>&1; then
   echo "ERROR : Interface $net_int does not exist"
   exit 1
 fi
-if [[ ! "$test_method" =~ ^[012]$ ]]; then
-  echo "ERROR : test_method must be 0, 1 or 2 (got '$test_method')"
+if [[ ! "$test_method" =~ ^[0123]$ ]]; then
+  echo "ERROR : test_method must be 0, 1, 2 or 3 (got '$test_method')"
   exit 1
 fi
 if [[ "$test_method" =~ ^[12]$ ]]; then
@@ -183,9 +183,9 @@ done
 
 conn_test () {
 check=0
-if [ $test_method -eq 1 ]; then
 ip r del default 2>/dev/null
 ip r add default via "$table_gateway"
+if [ $test_method -eq 1 ]; then
 ping_loss=$(ping -i 0.005 -4fqc 3 $ping_check_ip  2>/dev/null | awk -F',' '/packet loss/ {gsub(/[^0-9]/,"",$3); print $3}' | cut -c1-2)
 if [ -n "$ping_loss" ]; then
   if [ "$ping_loss" -gt 50 ]; then
