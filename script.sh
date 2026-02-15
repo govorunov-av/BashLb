@@ -186,9 +186,9 @@ check=0
 ip r del default 2>/dev/null
 ip r add default via "$table_gateway"
 if [ $test_method -eq 1 ]; then
-ping_loss=$(ping -i 0.005 -4fqc 3 $ping_check_ip  2>/dev/null | awk -F',' '/packet loss/ {gsub(/[^0-9]/,"",$3); print $3}' | cut -c1-2)
+ping_loss=$(ping -i 0.005 -4fqc 3 $ping_check_ip | grep -oP '\d+(?=%)')
 if [ -n "$ping_loss" ]; then
-  if [ "$ping_loss" -gt 50 ]; then
+  if [ "$ping_loss" -gt 40 ]; then
     echo "gw$counter : Ping too many losses ($ping_loss%)"
     check=1
   fi
